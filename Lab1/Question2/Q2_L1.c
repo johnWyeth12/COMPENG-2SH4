@@ -16,7 +16,7 @@ int main(void)
         scanf("%d", &n);
 
         //Check that (n) is positive - counting 0 as positive
-        if(n < 0)
+        if(n <= 0)
         {
             printf("Invalid Input - Must be Positive!\n");
         }
@@ -27,7 +27,7 @@ int main(void)
             scanf("%d", &lowestInput);
         }
 
-    }while(n < 0);
+    }while(n <= 0);
 
     //Ask the user to input an integer n-1 times (already asked once in the do-while loop)
     for (i = 1; i < n; i++)
