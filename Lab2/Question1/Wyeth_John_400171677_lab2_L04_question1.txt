@@ -1,0 +1,79 @@
+/*
+Question 1
+    2019-09-24
+*/
+
+#include <stdio.h>
+#include <math.h>
+
+void print_vector(double array[], int size);
+
+void add_vectors(double vector1[], double vector2[], double vector3[], int n);
+
+double scalar_prod(double vector1[], double vector2[], int n);
+
+double norm2(double vector1[], int n);
+
+#define N 3
+
+int main(void)
+{
+    double xArray[N] = {2, 4, 6};
+    double yArray[N] = {0, 1, 2};
+    double resultArray[N] = {0, 0, 0};
+
+    //Testing the "add_vectors" function
+    add_vectors(xArray, yArray, resultArray, N);
+    printf("Add_Vectors:   ");
+    print_vector(resultArray, N);
+    printf("\n");
+
+    //Testing the "scalar_prod" function
+    printf("Scalar_Prod:   %lf", scalar_prod(xArray, yArray, N));
+    printf("\n");
+
+    //Testing the "norm2" function
+    printf("L2 Norm:       %lf", norm2(xArray, N));
+    printf("\n");
+
+    return (0);
+}
+//Prints all the components in the array passed into this function
+void print_vector(double array[], int size)
+{
+    for(int i = 0; i < size; i++)
+    {
+        printf("%lf, ", array[i]);
+    }
+}
+
+//Adds vector1 and vector2 and puts the sum in the memory address of vector3 for the corresponding aray index
+//It's assumed that both vectors are the same length and (n) is that length
+void add_vectors(double vector1[], double vector2[], double vector3[], int n)
+{
+    for(int i = 0; i < n; i++)
+    {
+        vector3[i] = vector1[i] + vector2[i];
+    }
+}
+
+//Returns the dot product of two vectors
+double scalar_prod(double vector1[], double vector2[], int n)
+{
+    double total = 0;
+
+    for(int i = 0; i < n; i++)
+    {
+        total += ( vector1[i] * vector2[i] );
+    }
+
+    return total;
+}
+
+double norm2(double vector1[], int n)
+{
+    double scalarProduct = scalar_prod(vector1, vector1, n);
+
+    return ( sqrt(scalarProduct) );
+
+}
