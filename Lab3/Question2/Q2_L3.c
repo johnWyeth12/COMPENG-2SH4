@@ -34,16 +34,26 @@ int main(void)
     char fileOutput[] = "outputFile.txt";
     int sizePtr = 0;
 
+    /*
+             The following is testing the functions
+         -----------------------------------------------
+    */
+
     //Creates class list from given input file
     student ** classList = create_class_list(fileName, &sizePtr);
 
     //int i = find(9000, classList, sizePtr);
     //printf("Index: %d", i);
+
     //input_grades(fileGrades, classList, sizePtr);
+
     //compute_final_course_grades(classList, sizePtr);
     //output_final_course_grades(classList, fileOutput, sizePtr);
+
     //withdraw(1200, classList, &sizePtr);
+
     //print_list(classList, sizePtr);
+
     //destroy_list(classList, &sizePtr);
 
     return (0);

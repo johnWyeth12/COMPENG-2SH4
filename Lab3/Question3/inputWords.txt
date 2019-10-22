@@ -1,5 +1,0 @@
-4
-alpha
-delta
-beta
-poop

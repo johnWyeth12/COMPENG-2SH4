@@ -12,8 +12,8 @@ char *my_strcat(const char * const str1, const char * const str2);
 int main(void)
 {
     //reserving 50 characters for str1 and str2
-    char *str1 = calloc(50, sizeof(char));
-    char *str2 = calloc(50, sizeof(char));
+    char *str1 = calloc(500, sizeof(char));
+    char *str2 = calloc(500, sizeof(char));
 
     //Getting input from the user
     printf("Please Input A String: ");
