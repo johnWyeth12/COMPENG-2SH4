@@ -42,22 +42,19 @@ int main(void)
     //Creates class list from given input file
     student ** classList = create_class_list(fileName, &sizePtr);
 
-    int i = find(9000, classList, sizePtr);
-    printf("Index: %d", i);
+    //int i = find(9000, classList, sizePtr);
+    //printf("Index: %d", i);
 
-    input_grades(fileGrades, classList, sizePtr);
+    //input_grades(fileGrades, classList, sizePtr);
 
-    print_list(classList, sizePtr);
+    //compute_final_course_grades(classList, sizePtr);
+    //output_final_course_grades(classList, fileOutput, sizePtr);
 
-    compute_final_course_grades(classList, sizePtr);
-    output_final_course_grades(classList, fileOutput, sizePtr);
-    print_list(classList, sizePtr);
+    //withdraw(1200, classList, &sizePtr);
 
-    withdraw(12, classList, &sizePtr);
-    print_list(classList, sizePtr);
+    //print_list(classList, sizePtr);
 
-    destroy_list(classList, &sizePtr);
-    print_list(classList, sizePtr);
+    //destroy_list(classList, &sizePtr);
 
     return (0);
 }
@@ -177,12 +174,7 @@ void print_list(student ** list, int size)
 //Withdraws a student from the class list
 void withdraw(int idNo, student ** list, int * sizePtr)
 {
-
-    int searchIndex = 0;
-    do
-    {
-
-    searchIndex = find(idNo, list, *(sizePtr));
+    int searchIndex = find(idNo, list, *(sizePtr));
 
     //If the id is within the class list, the list is modified
     if(searchIndex != -1)
@@ -202,11 +194,8 @@ void withdraw(int idNo, student ** list, int * sizePtr)
     //If not, the user is told that the id cannot be withdrawn from the class list
     else
     {
-        printf("Could not withdraw - student ID not found, enter a new ID");
-        scanf("%d", &idNo);
+        printf("Could not withdraw - student ID not found\n");
     }
-
-    }while(searchIndex == -1);
 }
 
 void destroy_list(student ** list, int * sizePtr)

@@ -1,0 +1,174 @@
+
+public class UpperTriangularMatrix {
+	
+	private int nRows;
+	private int effArray[];
+	private Matrix upTriArray;
+	
+	public 	UpperTriangularMatrix(int n)
+	{
+		if(n <= 0)
+		{n = 1;}
+		
+		//Initializing variable fields
+		nRows = n;
+		upTriArray = new Matrix(nRows, nRows);
+		effArray = new int[(nRows * (nRows + 1)) / 2];
+	}
+	
+	public UpperTriangularMatrix(Matrix upTriM) throws IllegalArgumentException
+	{
+		//First check that the array is upper triangular
+		if(upTriM.isUpperTr())
+		{
+			//Initializing variable fields
+			upTriArray = upTriM;
+			nRows = upTriArray.getRows();
+			effArray = new int[(nRows * (nRows + 1)) / 2];
+		}
+		else
+		{
+			//If not upper triangular, throws an exception
+			throw new IllegalArgumentException("Matrix is not Upper Triangular");
+		}
+	}
+	
+	private void setUpEffArray()
+	{
+		int offset = 0;
+		for(int i = 0; i < this.nRows; i++)
+		{
+			for(int j = i; j < this.nRows; j++)
+			{
+				//Using an offset variable, I can count up in the effArray without depending on the values of the for loop variables
+				this.effArray[offset] = this.upTriArray.getElement(i, j);
+				offset++;
+			}
+		}
+	}
+	
+	public int getDim()
+	{
+		//Returning the number of rows from the calling object
+		return this.nRows;
+	}
+	
+	public int getElement(int i, int j) throws IndexOutOfBoundsException
+	{
+		//Checking that the parameters are within the array's bounds
+		if(i >= this.upTriArray.getRows() || j >= this.upTriArray.getRows())
+		{
+			//If parameters violate the bounds, throw exception
+			throw new IndexOutOfBoundsException("Invalid Index");
+		}
+		else
+		{
+			//Otherwise, return the element at the specified index
+			return this.upTriArray.getElement(i, j);
+		}
+	}
+	
+	public void setElement(int x, int i, int j) throws IndexOutOfBoundsException, IllegalArgumentException
+	{
+		//Check if (i) and (j) is within bounds
+		if(i >= this.nRows || j >= this.nRows) 
+		{
+			throw new IndexOutOfBoundsException("Invalid Indexes");
+		}
+		//Check if (i) and (j) are referring to lower part of the matrix
+		else if((i > j) && x != 0) // if x > i, then position refers to lower part of matrix
+		{
+			throw new IllegalArgumentException("Incorrent Argument");
+		}
+		else
+		{
+			upTriArray.setElement(x,  i,  j);
+		}
+	}
+	
+	public Matrix fullMatrix()
+	{
+		//Return the upper triangular matrix including all the zeros
+		return this.upTriArray;
+	}
+	
+	public void print1DArray()
+	{
+		//Setting up the efficient array
+		this.setUpEffArray();
+		
+		for(int i = 0; i < this.effArray.length; i++)
+		{
+			//Printing each element with the separation of two spaces
+			System.out.print(this.effArray[i] + "  ");
+		}
+	}
+	
+	public String toString()
+	{
+		String concatString = "";
+		
+		//Run through all the elements in the upper triangular array
+		for(int i = 0; i < this.nRows; i++)
+		{
+			for(int x = 0; x < this.nRows; x++)
+			{
+				concatString += this.upTriArray.getElement(i,  x) + "  ";
+			}
+			//Each new line is done by adding a new line character to the concatenated string
+			concatString += "\n";
+		}
+		
+		return concatString;
+	}
+	
+	public int getDet()
+	{
+		//Set total to (1) so any product will start
+		int total = 1;
+		for(int i = 0; i < this.nRows; i++)
+		{
+			//Using the [i][i] index references the main diagonal elements
+			total *= this.upTriArray.getElement(i,  i);
+		}
+		
+		//Returning the total product of the main diagonal entries
+		return total;
+	}
+	
+	public double[] effSolve(double[] b) throws IllegalArgumentException
+	{
+		
+		//Conditions before executing - rows match up and the determinant is non-zero
+		if(b.length == this.upTriArray.getRows() && this.getDet() != 0)
+		{
+			double x[] = new double[this.nRows];
+			double currentVal = 0;
+			
+			//Solves for x in the equation Ax=b
+			for(int i = this.nRows - 1; i >= 0; i--)
+			{
+				currentVal = b[i];
+				
+				for(int j = 0; j < this.nRows; j++)
+				{
+					if(j != i)
+					//if not, the b matrix's term is subtracted
+					{
+						currentVal -= (this.upTriArray.getElement(i, j) * x[j]);
+					}
+				}
+				
+				//Finally gets the final x value by dividing coefficient of diagonal term by the currentVal
+				x[i] = currentVal / (this.upTriArray.getElement(i,  i));
+			}
+			
+			return x;
+		}
+		else
+		{
+			throw new IllegalArgumentException("Matrix b Is Invalid");
+		}
+	}
+
+}

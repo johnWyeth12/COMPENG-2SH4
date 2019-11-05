@@ -1,0 +1,63 @@
+import java.util.Scanner;
+
+public class Bonus1 {
+	public static void main (String[] args)
+	{
+		Scanner kbReader = new Scanner(System.in);
+		int N, M, currentElement;
+		
+		System.out.print("An array of size [M][N], please enter M: ");
+		M = kbReader.nextInt();
+		System.out.print("please enter N: ");
+		N = kbReader.nextInt();
+		
+		int array[][] = new int [M][N];
+		int transposedArray[][] = new int [N][M];
+		
+		for(int i = 0; i < M; i++)
+		{
+			System.out.println("Row " + i);
+			for(int x = 0; x < N; x++)
+			{
+				System.out.print("Element " + x + ":");
+				currentElement = kbReader.nextInt();
+				array[i][x] = currentElement;
+			}
+		}
+
+		//Transposing the array
+		for(int i = 0; i < N; i++)
+		{
+			for(int x = 0; x < M; x++)
+			{
+				transposedArray[i][x] = array[x][i];
+			}
+		}
+		System.out.println();
+		
+		//Printing Original Array
+		System.out.println("Original Array:");
+		for(int i = 0; i < M; i++)
+		{
+			for(int x = 0; x < N; x++)
+			{
+				System.out.print(array[i][x] + " ");
+			}
+			System.out.println();
+		}
+		
+		System.out.println();
+		
+		//Printing Transposed Array
+		System.out.println("Transposed Array: ");
+		for(int i = 0; i < N; i++)
+		{
+			for(int x = 0; x < M; x++)
+			{
+				System.out.print(transposedArray[i][x] + " ");
+			}
+			System.out.println();
+		}
+		
+	}
+}

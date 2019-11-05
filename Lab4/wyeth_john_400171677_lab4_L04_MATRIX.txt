@@ -1,0 +1,186 @@
+
+public class Matrix {
+
+	private int Rows, Columns;
+	private int array[][];
+
+	//Constructor - given rows and columns
+	public Matrix (int row, int col)
+	{
+		//Construct row by row matrix with elements = 0
+		if(row <= 0) {Rows = 3;} else {Rows = row;}
+		if(col <= 0) {Columns = 3;} else {Columns = col;}
+		
+		//The new array is made - sizes are based on conditionals above
+		array = new int [Rows][Columns];
+	}
+	
+	//Constructor - given array
+	public Matrix (int [][] Matrix)
+	{
+		array = new int [Matrix.length][Matrix[0].length];
+		array = Matrix;
+		Rows = Matrix.length;
+		Columns = Matrix[0].length;
+	}
+	
+	//Get method to access a private variable
+	public int getRows()
+	{
+		return this.array.length;
+	}
+	
+	//Gets element at certain index - watches for outOfBounds exception
+	public int getElement(int i, int j) throws IndexOutOfBoundsException
+	{
+		//Checks that inputs doesn't violate the array's bounds
+		if(i >= array.length || j >= array[0].length)
+		{
+			//If so, throws exception
+			throw new IndexOutOfBoundsException("Invalid Indexes");
+		}
+		else
+		{
+			//If not, returns array at point [i][j]
+			return array[i][j];
+		}
+	}
+	
+	//Sets element to value (x), given index bounds are valid
+	public boolean setElement(int x, int i, int j)
+	{
+		//Checks that inputs doesn't violate the array's bounds
+		if(i >= array.length || j >= array[0].length)
+		{
+			//False is returned - nothing happens to the array
+			return false;
+		}
+		else
+		{
+			//True is returned after the array[i][j] is set to x
+			array[i][j] = x;
+			return true;
+		}
+	}
+	
+	//Returns DEEP copy of this matrix (array) - doesn't share memory
+	public Matrix copy()
+	{
+		Matrix matrixNew = new Matrix(array);
+		return matrixNew;
+	}
+	
+	//Adds Matrix m to "this" Matrix. The calling object is modified
+	public void addTo(Matrix m) throws ArithmeticException
+	{
+		//If the dimensions of both arrays are the same, then the program adds them
+		if(this.array.length == m.array.length && this.array[0].length == m.array[0].length)
+		{
+			for(int i = 0; i < this.array.length; i++)
+			{
+				for(int x = 0; x < this.array[0].length; x++)
+				{
+					//"this" array is modified
+					this.array[i][x] += m.array[i][x];
+				}
+			}
+		}
+		else
+		{
+			//Otherwise it throws an ArithmeticException
+			throw new ArithmeticException("Invalid Operation");
+		}
+	}
+	
+	public Matrix subMatrix(int i, int j) throws ArithmeticException
+	{
+		if(i <= this.array.length && j <= this.array[0].length)
+		{
+			Matrix subMatrix = new Matrix(i+1, j+1);
+			
+			for(int a = 0; a <= i; a++)
+			{
+				for(int b = 0; b <= j; b++)
+				{
+					subMatrix.setElement(this.array[a][b], a, b);
+				}
+			}
+			
+			return subMatrix;
+		}
+		else
+		{
+			throw new ArithmeticException("Submatrix not defined");
+		}
+	}
+	
+	public boolean isUpperTr()
+	{
+		int bound = this.array.length;
+		int count = 0;
+		
+		for(int i = 0; i < bound; i++)
+		{
+			for(int x = 0; x < this.array.length; x++)
+			{
+				if(this.array[x][i] == 0) {count++;}
+			}
+			//If the number of zeros is not what an upper triangular matrix should have, the function automatically returns "false"
+			if(count != (bound - 1)) {return false;}
+			bound--;
+			
+			//Resetting the count of 0's
+			count = 0;
+		}
+		
+		//If the program reaches here, the matrix IS upper triangular and returns "true"
+		return true;
+	}
+	
+	public static Matrix sum(Matrix[] matArray) throws ArithmeticException
+	{
+		int rows = matArray[0].Rows;
+		int columns = matArray[0].Columns;
+		
+		//Check that all matrices have the same dimensions
+		for(int i = 1; i < matArray.length; i++)
+		{
+			if(matArray[i].Rows != rows || matArray[i].Columns != columns)
+			{
+				throw new ArithmeticException("Matricies are not of same dimensions");
+			}
+		}
+		
+		Matrix newMatrix = new Matrix(rows, columns);
+		
+		//Adding to the new array from all the arrays passed into the function
+		for(int i = 0; i < matArray.length; i++)
+		{
+			newMatrix.addTo(matArray[i]);
+		}
+		
+		return newMatrix;
+	}
+	
+	public String toString()
+	{
+		String concatString = "";
+		
+		//Run through the array, ror by row, column by column
+		for(int i = 0; i < this.array.length; i++)
+		{
+			for(int x = 0; x < this.array[0].length; x++)
+			{
+				//Adds the element at [i][x] followed by TWO blank spaces
+				concatString += this.array[i][x] + "  ";
+			}
+			//Puts the next row of the array on a next line with the special character
+			concatString += "\n";
+		}
+		
+		return concatString;
+	}
+	
+	
+	
+}
