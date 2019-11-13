@@ -1,7 +1,7 @@
 
 public class Matrix {
 
-	private int Rows, Columns;
+	private int Rows, Columns; // Number of rows and columns
 	private int array[][];
 
 	//Constructor - given rows and columns
@@ -12,16 +12,16 @@ public class Matrix {
 		if(col <= 0) {Columns = 3;} else {Columns = col;}
 		
 		//The new array is made - sizes are based on conditionals above
-		array = new int [Rows][Columns];
+		this.array = new int [Rows][Columns];
 	}
 	
 	//Constructor - given array
 	public Matrix (int [][] Matrix)
 	{
-		array = new int [Matrix.length][Matrix[0].length];
-		array = Matrix;
-		Rows = Matrix.length;
-		Columns = Matrix[0].length;
+		this.array = new int [Matrix.length][Matrix[0].length];
+		this.array = Matrix;
+		this.Rows = Matrix.length;
+		this.Columns = Matrix[0].length;
 	}
 	
 	//Get method to access a private variable
@@ -42,7 +42,7 @@ public class Matrix {
 		else
 		{
 			//If not, returns array at point [i][j]
-			return array[i][j];
+			return this.array[i][j];
 		}
 	}
 	
@@ -58,7 +58,7 @@ public class Matrix {
 		else
 		{
 			//True is returned after the array[i][j] is set to x
-			array[i][j] = x;
+			this.array[i][j] = x;
 			return true;
 		}
 	}
@@ -180,7 +180,5 @@ public class Matrix {
 		
 		return concatString;
 	}
-	
-	
 	
 }

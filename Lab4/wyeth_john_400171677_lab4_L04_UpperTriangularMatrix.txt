@@ -11,9 +11,9 @@ public class UpperTriangularMatrix {
 		{n = 1;}
 		
 		//Initializing variable fields
-		nRows = n;
-		upTriArray = new Matrix(nRows, nRows);
-		effArray = new int[(nRows * (nRows + 1)) / 2];
+		this.nRows = n;
+		this.upTriArray = new Matrix(nRows, nRows);
+		this.effArray = new int[(nRows * (nRows + 1)) / 2];
 	}
 	
 	public UpperTriangularMatrix(Matrix upTriM) throws IllegalArgumentException
@@ -22,9 +22,9 @@ public class UpperTriangularMatrix {
 		if(upTriM.isUpperTr())
 		{
 			//Initializing variable fields
-			upTriArray = upTriM;
-			nRows = upTriArray.getRows();
-			effArray = new int[(nRows * (nRows + 1)) / 2];
+			this.upTriArray = upTriM;
+			this.nRows = upTriArray.getRows();
+			this.effArray = new int[(nRows * (nRows + 1)) / 2];
 		}
 		else
 		{
@@ -82,7 +82,7 @@ public class UpperTriangularMatrix {
 		}
 		else
 		{
-			upTriArray.setElement(x,  i,  j);
+			this.upTriArray.setElement(x,  i,  j);
 		}
 	}
 	
