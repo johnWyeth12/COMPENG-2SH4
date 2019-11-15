@@ -1,5 +1,7 @@
 
 public class SLLSet {
+	//TODO make instance variables PRIVATE
+	//Kept public for testing
 	int size; 
 	SLLNode head;
 	
@@ -11,9 +13,9 @@ public class SLLSet {
 	public SLLSet(int[] sortedArray)
 	{
 		this.size = sortedArray.length;
-		SLLNode Nodes = new SLLNode(-1, null);
+		SLLNode Nodes = new SLLNode(0, null);
 		//Store the "head" of the linked list in a variable that won't change
-		head = Nodes;
+		this.head = Nodes;
 		
 		//setting data in the "Nodes" array
 		for(int i = 0; i < this.size; i++)
@@ -124,6 +126,8 @@ public class SLLSet {
 				{
 					//Jump over the node to be deleted
 					runner.next = runner.next.next;
+					this.size--;
+					return;
 				}
 				else
 				//Otherwise the runner node progresses through the linked list
@@ -197,7 +201,50 @@ public class SLLSet {
 		}
 		
 		return returningSet;
+	}
+	
+	//Returns a set that holds all the differences between the calling object and the object passed in
+	public SLLSet difference(SLLSet s)
+	{
+		//Declaring a new node to return, along with a runner node to look through the linked lists
+		SLLNode runner;
+		SLLSet returningSet = new SLLSet();
 		
+		//Getting the size of both lists
+		int large;
+		//Based on the sizes of the lists, I set the runner node to the head
+		if(this.size > s.size) { large = this.size; runner = this.head; } else { large = s.size; runner = s.head; }
+		
+		//Have to run the for loop for as many elements there are in the larger of the two lists
+		for(int i = 0; i < large; i++)
+		{
+			//If the current value at the runner node is in one of the linked lists, and NOT the other, it's added to
+			//the returning set
+			if( ( this.isIn(runner.value) && !s.isIn(runner.value) ) 
+					|| ( !this.isIn(runner.value) && s.isIn(runner.value) ) ) 
+			{ 
+				returningSet.add(runner.value); 
+			}
+			runner = runner.next;
+		}
+		
+		return returningSet;
+	}
+	
+	//Returns a SLLSet that represents the union of all the SLLSets passed in, within the array
+	public static SLLSet union(SLLSet[] sArray)
+	{
+		//Set up the returningSet to the first element of the array, as a starting point
+		SLLSet returningSet = sArray[0];
+		
+		//For loop to loop through all remaining sets to modify the returningSet to get the final union of all of them
+		for(int i = 1; i < sArray.length; i++)
+		{
+			//Adding the next set to the placeholder set, initialized above
+			returningSet = returningSet.union(sArray[i]);
+		}
+		
+		return returningSet;
 	}
 }
 
