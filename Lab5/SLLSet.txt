@@ -1,13 +1,11 @@
 
 public class SLLSet {
-	//TODO make instance variables PRIVATE
-	//Kept public for testing
-	int size; 
-	SLLNode head;
+	private int size; 
+	private SLLNode head;
 	
 	//Constructor with 0 elements
 	public SLLSet()
-	{ this.size = 1; this.head = new SLLNode(0, null);}
+	{ this.size = 0; this.head = new SLLNode(0, null);}
 	
 	//Constructor with a sorted array passed into it
 	public SLLSet(int[] sortedArray)
@@ -89,10 +87,10 @@ public class SLLSet {
 			SLLNode newNode = new SLLNode(v, null);
 			
 			//have to check if the element needs to be added to the START of the list - different assignment procedure
-			if(head.value > v || this.head.next == null) {newNode.next = this.head; this.head = newNode; return;}
+			if(head.value > v || this.head.next == null) {newNode.next = this.head; this.head = newNode; this.size++; return;}
 			
 			//Run through the linked list with the (runner) object
-			for(int i = 0; i < this.size; i++)
+			for(int i = 0; i < this.getSize(); i++)
 			{
 				//because the list is sorted, the only indication to the position of the new element is if the next value is GREATER than (v)
 				if(runner.next.value > v || runner.next.next == null)
@@ -118,9 +116,12 @@ public class SLLSet {
 		//only runs the meat of this function if (v) is in the linked list
 		if(this.isIn(v))
 		{
-			//Initialize a "runner" node to look through the linked list
 			SLLNode runner = this.head;
-			for(int i = 0; i < this.size; i++)
+			
+			if(runner.value == v) { this.head = runner.next; this.size--; return; }
+			
+			//Initialize a "runner" node to look through the linked list
+			for(int i = 0; i < this.getSize(); i++)
 			{
 				if(runner.next.value == v)
 				{
@@ -144,7 +145,7 @@ public class SLLSet {
 		
 		//Run through the calling object's list
 		SLLNode runner = this.head;
-		for(int i = 0; i < this.size; i++)
+		for(int i = 0; i < this.getSize(); i++)
 		{
 			//Even though the add() method has a sanity check, check if add() should be called in the first place
 			if(!returningSet.isIn(runner.value))
@@ -156,7 +157,7 @@ public class SLLSet {
 		
 		//Re-position the runner node, then run through the list of the object passed in
 		runner = s.head;
-		for(int i = 0; i < s.size; i++)
+		for(int i = 0; i < s.getSize(); i++)
 		{
 			//Even though the add() method has a sanity check, check if add() should be called in the first place
 			if(!returningSet.isIn(runner.value))
@@ -179,13 +180,13 @@ public class SLLSet {
 		//Depending on the size of both sets, the smallest set size is selected because intersections can only be as big as the smallest set
 		if(this.size < s.size)
 		{
-			smallestSetSize = this.size;
+			smallestSetSize = this.getSize();
 			//The runner node is set accordingly
 			runner = this.head;
 		}
 		else
 		{
-			smallestSetSize = s.size;
+			smallestSetSize = s.getSize();
 			//The runner node is set accordingly
 			runner = s.head;
 		}
@@ -213,7 +214,7 @@ public class SLLSet {
 		//Getting the size of both lists
 		int large;
 		//Based on the sizes of the lists, I set the runner node to the head
-		if(this.size > s.size) { large = this.size; runner = this.head; } else { large = s.size; runner = s.head; }
+		if(this.getSize() > s.getSize()) { large = this.getSize(); runner = this.head; } else { large = s.getSize(); runner = s.head; }
 		
 		//Have to run the for loop for as many elements there are in the larger of the two lists
 		for(int i = 0; i < large; i++)
@@ -245,6 +246,29 @@ public class SLLSet {
 		}
 		
 		return returningSet;
+	}
+	
+	//Returns an easily readable string of "this" set
+	public String toString()
+	{
+		String returningString = "{";
+		SLLNode runner = this.head;
+		
+		for(int i = 0; i < this.getSize(); i++)
+		{
+			if(i == this.getSize() - 1)
+			{
+				returningString += runner.value;
+			}
+			else
+			{
+				returningString += runner.value + ", ";
+			}
+			runner = runner.next;
+		}
+		
+		//Returning the concatenated string
+		return returningString + "}";
 	}
 }
 
