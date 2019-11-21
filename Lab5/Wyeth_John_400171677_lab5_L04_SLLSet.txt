@@ -1,0 +1,273 @@
+
+public class SLLSet {
+	private int size; 
+	private SLLNode head;
+	
+	//Constructor with 0 elements
+	public SLLSet()
+	{ this.size = 0; this.head = new SLLNode(0, null);}
+	
+	//Constructor with a sorted array passed into it
+	public SLLSet(int[] sortedArray)
+	{
+		this.size = sortedArray.length;
+		SLLNode Nodes = new SLLNode(0, null);
+		//Store the "head" of the linked list in a variable that won't change
+		this.head = Nodes;
+		
+		//setting data in the "Nodes" array
+		for(int i = 0; i < this.size; i++)
+		{
+			Nodes.value = sortedArray[i];
+			Nodes.next = new SLLNode(sortedArray[i], null);
+			
+			//Move the (Node)  pointer to it's (next) attribute
+			Nodes = Nodes.next;
+		}
+		
+	}
+	
+	public int[] getLinkedArray()
+	{
+		int[] list = new int[this.size];
+		//Position the runner Node to start at the beginning of the (this.Nodes) array
+		SLLNode runner = this.head;
+		
+		for(int i = 0; i < list.length; i++)
+		{
+			list[i] = runner.value;
+			//Run the (runner) Node up to the next Node
+			runner = runner.next;
+		}
+		
+		return list;
+	}
+	
+	//Returning the size of the calling object
+	public int getSize()
+	{ return this.size; }
+	
+	//Returns deep copy of SLLSet - shares no memory
+	public SLLSet copy()
+	{
+		//First getting an array version of the linked list
+		int[] sortedArray = getLinkedArray();
+		//Create a "deep copy" of the calling object
+		SLLSet newSet = new SLLSet(sortedArray);
+		
+		return newSet;
+	}
+	
+	//Returning a boolean value if a value (v) is in the linked array
+	public boolean isIn(int v)
+	{
+		//Getting an array version of the linked list is easier to work with
+		int[] list = getLinkedArray();
+		
+		for(int i = 0; i < list.length; i++)
+		{
+			if(list[i] == v)
+			{
+				//Return True if (v) is in the linked array
+				return true;
+			}
+		}
+		
+		//If the program gets here, (v) is not in the linked array, and returns False
+		return false;
+	}
+	
+	//Adds node to the SLLSet object
+	public void add(int v)
+	{
+		//Only runs the meat of this function is (v) is NOT already in the linked array
+		if(!this.isIn(v))
+		{
+			SLLNode runner = this.head;
+			SLLNode newNode = new SLLNode(v, null);
+			
+			//have to check if the element needs to be added to the START of the list - different assignment procedure
+			if(head.value > v || this.head.next == null) {newNode.next = this.head; this.head = newNode; this.size++; return;}
+			
+			//Run through the linked list with the (runner) object
+			for(int i = 0; i < this.getSize(); i++)
+			{
+				//because the list is sorted, the only indication to the position of the new element is if the next value is GREATER than (v)
+				if(runner.next.value > v || runner.next.next == null)
+				{
+					//Re-arranging the (next) instance for the newest node first, then setting the (runner)'s next location to the newest node
+					newNode.next = runner.next;
+					runner.next = newNode;
+					
+					//Acknowledge the addition by adding 1 to the size
+					this.size++;
+					return;
+				}
+				else
+				//If the position hasn't been found yet, keep running through the linked list
+				{ runner = runner.next; }
+			}
+		}
+	}
+	
+	//Removes a node from the SLLSet object
+	public void remove(int v)
+	{
+		//only runs the meat of this function if (v) is in the linked list
+		if(this.isIn(v))
+		{
+			SLLNode runner = this.head;
+			
+			if(runner.value == v) { this.head = runner.next; this.size--; return; }
+			
+			//Initialize a "runner" node to look through the linked list
+			for(int i = 0; i < this.getSize(); i++)
+			{
+				if(runner.next.value == v)
+				{
+					//Jump over the node to be deleted
+					runner.next = runner.next.next;
+					this.size--;
+					return;
+				}
+				else
+				//Otherwise the runner node progresses through the linked list
+				{ runner = runner.next; }
+			}
+		}
+	}
+	
+	//Returns an SLLSet of the union of the calling object, and the object passed in
+	public SLLSet union(SLLSet s)
+	{
+		//The array of union elements must be as the sum of both sets
+		SLLSet returningSet = new SLLSet();
+		
+		//Run through the calling object's list
+		SLLNode runner = this.head;
+		for(int i = 0; i < this.getSize(); i++)
+		{
+			//Even though the add() method has a sanity check, check if add() should be called in the first place
+			if(!returningSet.isIn(runner.value))
+			{
+				returningSet.add(runner.value);
+			}
+			runner = runner.next;
+		}
+		
+		//Re-position the runner node, then run through the list of the object passed in
+		runner = s.head;
+		for(int i = 0; i < s.getSize(); i++)
+		{
+			//Even though the add() method has a sanity check, check if add() should be called in the first place
+			if(!returningSet.isIn(runner.value))
+			{
+				returningSet.add(runner.value);
+			}
+			runner = runner.next;
+		}
+		
+		return returningSet;
+	}
+	
+	//Returns the intersection set between the calling object and the object passed in
+	public SLLSet intersection(SLLSet s)
+	{
+		SLLSet returningSet = new SLLSet();
+		SLLNode runner;
+		int smallestSetSize;
+		
+		//Depending on the size of both sets, the smallest set size is selected because intersections can only be as big as the smallest set
+		if(this.size < s.size)
+		{
+			smallestSetSize = this.getSize();
+			//The runner node is set accordingly
+			runner = this.head;
+		}
+		else
+		{
+			smallestSetSize = s.getSize();
+			//The runner node is set accordingly
+			runner = s.head;
+		}
+		
+		for(int i = 0; i < smallestSetSize; i++)
+		{
+			//The runner node's value has to be in BOTH the calling object and the object passed in to be added to the new set
+			if(this.isIn(runner.value) && s.isIn(runner.value))
+			{
+				returningSet.add(runner.value);
+			}
+			runner = runner.next;
+		}
+		
+		return returningSet;
+	}
+	
+	//Returns a set that holds all the differences between the calling object and the object passed in
+	public SLLSet difference(SLLSet s)
+	{
+		//Declaring a new node to return, along with a runner node to look through the linked lists
+		SLLNode runner;
+		SLLSet returningSet = new SLLSet();
+		
+		//Getting the size of both lists
+		int large;
+		//Based on the sizes of the lists, I set the runner node to the head
+		if(this.getSize() > s.getSize()) { large = this.getSize(); runner = this.head; } else { large = s.getSize(); runner = s.head; }
+		
+		//Have to run the for loop for as many elements there are in the larger of the two lists
+		for(int i = 0; i < large; i++)
+		{
+			//If the current value at the runner node is in one of the linked lists, and NOT the other, it's added to
+			//the returning set
+			if( ( this.isIn(runner.value) && !s.isIn(runner.value) ) 
+					|| ( !this.isIn(runner.value) && s.isIn(runner.value) ) ) 
+			{ 
+				returningSet.add(runner.value); 
+			}
+			runner = runner.next;
+		}
+		
+		return returningSet;
+	}
+	
+	//Returns a SLLSet that represents the union of all the SLLSets passed in, within the array
+	public static SLLSet union(SLLSet[] sArray)
+	{
+		//Set up the returningSet to the first element of the array, as a starting point
+		SLLSet returningSet = sArray[0];
+		
+		//For loop to loop through all remaining sets to modify the returningSet to get the final union of all of them
+		for(int i = 1; i < sArray.length; i++)
+		{
+			//Adding the next set to the placeholder set, initialized above
+			returningSet = returningSet.union(sArray[i]);
+		}
+		
+		return returningSet;
+	}
+	
+	//Returns an easily readable string of "this" set
+	public String toString()
+	{
+		String returningString = "{";
+		SLLNode runner = this.head;
+		
+		for(int i = 0; i < this.getSize(); i++)
+		{
+			if(i == this.getSize() - 1)
+			{
+				returningString += runner.value;
+			}
+			else
+			{
+				returningString += runner.value + ", ";
+			}
+			runner = runner.next;
+		}
+		
+		//Returning the concatenated string
+		return returningString + "}";
+	}
+}
